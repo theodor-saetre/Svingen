@@ -2,7 +2,9 @@ backend:
   name: git-gateway
   branch: main
 
-media_folder: images
+publish_mode: simple
+
+media_folder: Svingen/images
 
 collections:
   - name: settings
@@ -10,7 +12,7 @@ collections:
     files:
       - name: general
         label: Generelt
-        file: data/settings.json
+        file: Svingen/data/settings.json
         fields:
           - { label: Restaurantnavn, name: name, widget: string }
           - { label: Telefon, name: phone, widget: string }
