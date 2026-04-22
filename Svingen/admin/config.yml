@@ -1,0 +1,19 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: images
+
+collections:
+  - name: settings
+    label: Innstillinger
+    files:
+      - name: general
+        label: Generelt
+        file: data/settings.json
+        fields:
+          - { label: Restaurantnavn, name: name, widget: string }
+          - { label: Telefon, name: phone, widget: string }
+          - { label: Adresse, name: address, widget: string }
+          - { label: Åpningstider hverdager, name: weekdays, widget: string }
+          - { label: Åpningstider helg, name: weekend, widget: string }
