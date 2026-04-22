@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Svingen – på Sletta</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; color: #1a1a1a; background: #fff; }
+    :root { --brun: #2C1F0E; --gull: #C9A96E; --krem: #F5ECD7; --lys: #D4B896; }
+
+    /* NAV */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--brun); position: sticky; top: 0; z-index: 100; }
+    .nav-logo img { height: 40px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { font-size: 13px; color: var(--lys); text-decoration: none; cursor: pointer; }
+    .nav-links a:hover { color: var(--gull); }
+    .nav-cta { background: var(--gull); color: var(--brun); border: none; padding: 9px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; }
+
+    /* HERO */
+    .hero { position: relative; height: 480px; overflow: hidden; }
+    .hero img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
+    .hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
+    .hero-tag { font-size: 11px; letter-spacing: 3px; color: var(--gull); text-transform: uppercase; margin-bottom: 0.75rem; }
+    .hero h1 { font-size: 42px; font-weight: bold; color: var(--krem); margin-bottom: 0.5rem; }
+    .hero p { font-size: 16px; color: var(--lys); margin-bottom: 1.75rem; }
+    .hero-btns { display: flex; gap: 14px; }
+    .btn-gold { background: var(--gull); color: var(--brun); border: none; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
+    .btn-ghost { background: transparent; color: var(--krem); border: 1.5px solid var(--gull); padding: 13px 28px; border-radius: 8px; font-size: 15px; cursor: pointer; }
+
+    /* INFO STRIP */
+    .info-strip { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--brun); }
+    .info-item { padding: 1.25rem 1.5rem; border-right: 1px solid rgba(201,169,110,0.2); }
+    .info-item:last-child { border-right: none; }
+    .info-item .lbl { font-size: 10px; letter-spacing: 2px; color: var(--gull); text-transform: uppercase; margin-bottom: 5px; }
+    .info-item .val { font-size: 14px; color: var(--krem); line-height: 1.6; }
+
+    /* LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+    section { padding: 4rem 0; }
+    .section-tag { font-size: 10px; letter-spacing: 2px; color: var(--gull); text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: 28px; font-weight: bold; color: var(--brun); margin-bottom: 2rem; }
+
+    /* BILDEGALLERI */
+    .photo-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 200px 200px; gap: 6px; }
+    .photo-grid img { width: 100%; height: 100%; object-fit: cover; }
+    .photo-grid .big { grid-row: 1 / 3; }
+
+    /* MENY */
+    .menu-tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .tab { padding: 9px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; border: 1px solid #ddd; background: #fff; color: #666; }
+    .tab.active { background: var(--brun); color: var(--krem); border-color: var(--brun); }
+    .menu-list { display: none; }
+    .menu-list.active { display: block; }
+    .menu-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #f0f0f0; gap: 16px; }
+    .menu-item:last-child { border-bottom: none; }
+    .item-name { font-size: 16px; font-weight: bold; margin-bottom: 4px; }
+    .item-desc { font-size: 13px; color: #777; line-height: 1.5; }
+    .item-price { font-size: 16px; font-weight: bold; color: var(--brun); white-space: nowrap; }
+
+    /* OM OSS */
+    .om-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .om-grid img { width: 100%; height: 340px; object-fit: cover; border-radius: 12px; }
+    .om-grid p { font-size: 15px; color: #555; line-height: 1.9; margin-bottom: 1rem; }
+
+    /* ANMELDELSER */
+    .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .review-card { background: #faf8f5; border-radius: 12px; padding: 1.5rem; }
+    .review-stars { color: var(--gull); font-size: 14px; margin-bottom: 8px; }
+    .review-text { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 12px; font-style: italic; }
+    .review-author { font-size: 13px; font-weight: bold; color: var(--brun); }
+
+    /* BORDBESTILLING */
+    .booking-section { background: var(--brun); padding: 4rem 0; }
+    .booking-section .section-title { color: var(--krem); }
+    .booking-section .section-tag { color: var(--gull); }
+    .booking-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+    .booking-form input, .booking-form select {
+      padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(201,169,110,0.4);
+      background: rgba(255,255,255,0.1); color: var(--krem); font-size: 14px; min-width: 150px;
+    }
+    .booking-form input::placeholder { color: var(--lys); }
+    .booking-form select option { background: var(--brun); color: var(--krem); }
+    .booking-form .btn-gold { flex-shrink: 0; }
+
+    /* KONTAKT */
+    .kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .kontakt-card { background: #faf8f5; border-radius: 12px; padding: 1.5rem; }
+    .kontakt-card .lbl { font-size: 10px; letter-spacing: 2px; color: var(--gull); text-transform: uppercase; margin-bottom: 8px; }
+    .kontakt-card .val { font-size: 15px; color: #333; line-height: 1.8; }
+    .map-card { background: var(--brun); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; }
+    .map-card .lbl { font-size: 10px; letter-spacing: 2px; color: var(--gull); text-transform: uppercase; margin-bottom: 8px; }
+    .map-card .val { font-size: 15px; color: var(--krem); line-height: 1.8; }
+    .map-btn { background: var(--gull); color: var(--brun); border: none; padding: 11px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; display: inline-block; text-decoration: none; }
+
+    /* GRUPPEBESTILLING */
+    .gruppe-section { background: #faf8f5; padding: 4rem 0; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 13px; color: #666; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 11px 14px; border-radius: 8px; border: 1px solid #ddd;
+      font-size: 14px; background: #fff; color: #1a1a1a;
+    }
+    .form-group textarea { min-height: 110px; resize: vertical; line-height: 1.6; }
+    .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+    .checkbox-row { display: flex; align-items: center; gap: 10px; font-size: 14px; cursor: pointer; }
+    .checkbox-row input { width: 16px; height: 16px; accent-color: var(--gull); }
+    .submit-btn { background: var(--brun); color: var(--krem); border: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+    .submit-btn:hover { background: #3d2b12; }
+    .success-msg { display: none; background: #e8f5e9; border: 1px solid #4caf50; border-radius: 12px; padding: 2rem; text-align: center; }
+    .success-msg h3 { font-size: 20px; color: #2e7d32; margin-bottom: 8px; }
+    .success-msg p { color: #388e3c; font-size: 14px; }
+
+    /* FOOTER */
+    footer { background: var(--brun); padding: 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-logo { font-size: 15px; font-weight: bold; color: var(--krem); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--lys); text-decoration: none; }
+    .footer-copy { width: 100%; font-size: 12px; color: rgba(213,184,150,0.4); margin-top: 0.5rem; }
+
+    /* RESPONSIV */
+    @media (max-width: 768px) {
+      .info-strip { grid-template-columns: repeat(2, 1fr); }
+      .photo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 160px); }
+      .photo-grid .big { grid-row: auto; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .om-grid { grid-template-columns: 1fr; }
+      .kontakt-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: auto; }
+      .nav-links { display: none; }
+      .hero h1 { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGASJON -->
+<nav>
+  <div class="nav-logo"><img src="logo.jpg" alt="Svingen" /></div>
+  <div class="nav-links">
+    <a href="#meny">Meny</a>
+    <a href="#om">Om oss</a>
+    <a href="#kontakt">Kontakt</a>
+    <a href="#gruppe">Gruppebestilling</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('bord').scrollIntoView({behavior:'smooth'})">Bestill bord</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1400&auto=format&fit=crop" alt="Svingen restaurant" />
+  <div class="hero-content">
+    <div class="hero-tag">Kafé · Restaurant · Bar · Oslo</div>
+    <h1>Svingen – på Sletta</h1>
+    <p>Nabolagets hjerte. God mat, kaffe og stemning ved Ekeberg.</p>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="document.getElementById('bord').scrollIntoView({behavior:'smooth'})">Bestill bord</button>
+      <button class="btn-ghost" onclick="document.getElementById('meny').scrollIntoView({behavior:'smooth'})">Se menyen</button>
+    </div>
+  </div>
+</div>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item"><div class="lbl">Åpningstider</div><div class="val">Man–Fre 08–22<br>Lør–Søn 09–23</div></div>
+  <div class="info-item"><div class="lbl">Adresse</div><div class="val">Ballplassveien 2<br>1181 Oslo</div></div>
+  <div class="info-item"><div class="lbl">Telefon</div><div class="val">40 55 57 77</div></div>
+  <div class="info-item"><div class="lbl">Vurdering</div><div class="val">★★★★★ 4,8<br>90 anmeldelser</div></div>
+</div>
+
+<!-- BILDEGALLERI -->
+<div class="container" style="padding-top: 3rem;">
+  <div class="photo-grid">
+    <img class="big" src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800&q=80" alt="Mat" />
+    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&q=80" alt="Kaffe" />
+    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" alt="Pizza" />
+    <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&q=80" alt="Restaurant" />
+    <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&q=80" alt="Frokost" />
+  </div>
+</div>
+
+<!-- MENY -->
+<section id="meny">
+  <div class="container">
+    <div class="section-tag">Mat & drikke</div>
+    <div class="section-title">Menyen vår</div>
+    <div class="menu-tabs">
+      <div class="tab active" onclick="showTab('lunsj', this)">Lunsj</div>
+      <div class="tab" onclick="showTab('pizza', this)">Pizza</div>
+      <div class="tab" onclick="showTab('kaffe', this)">Kaffe & drikke</div>
+      <div class="tab" onclick="showTab('bar', this)">Bar</div>
+    </div>
+    <div class="menu-list active" id="lunsj">
+      <div class="menu-item"><div><div class="item-name">Egg & bacon på surdeigsbrød</div><div class="item-desc">Sprøstekt bacon, egg, hjemmelaget surdeigsbrød, salat og dressing</div></div><div class="item-price">145 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Avokado toast</div><div class="item-desc">Surdeigsbrød, avokado, fetaost, chiliflak og sitron</div></div><div class="item-price">139 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Dagens suppe</div><div class="item-desc">Hjemmelaget suppe med brød – spør om dagens valg</div></div><div class="item-price">129 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Svingen-salat</div><div class="item-desc">Blandet grønt, kylling, parmesan, krutonger og husets dressing</div></div><div class="item-price">155 kr</div></div>
+    </div>
+    <div class="menu-list" id="pizza">
+      <div class="menu-item"><div><div class="item-name">Øst og skinke</div><div class="item-desc">Hjemmelaget tomatsaus, mozzarella, skinke, basilikum</div></div><div class="item-price">179 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Margherita</div><div class="item-desc">Tomatsaus, mozzarella, fersk basilikum, olivenolje</div></div><div class="item-price">149 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Pepperoni</div><div class="item-desc">Tomatsaus, mozzarella, pepperoni, chili</div></div><div class="item-price">185 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Vegetar</div><div class="item-desc">Tomatsaus, mozzarella, grillede grønnsaker, pesto</div></div><div class="item-price">169 kr</div></div>
+    </div>
+    <div class="menu-list" id="kaffe">
+      <div class="menu-item"><div><div class="item-name">Espresso</div><div class="item-desc">Singel eller dobbel</div></div><div class="item-price">40 / 50 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Flat white</div><div class="item-desc">Dobbel espresso med dampet melk</div></div><div class="item-price">59 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Latte</div><div class="item-desc">Espresso med dampet melk og skum</div></div><div class="item-price">59 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Ferskpresset juice</div><div class="item-desc">Appelsin, gulrot eller ingefær</div></div><div class="item-price">69 kr</div></div>
+    </div>
+    <div class="menu-list" id="bar">
+      <div class="menu-item"><div><div class="item-name">Husets øl (0,4l)</div><div class="item-desc">Spør om dagens utvalg på flaske og fat</div></div><div class="item-price">89 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Glass vin (hvit/rød)</div><div class="item-desc">Ukentlig utvalg fra lokale importører</div></div><div class="item-price">99 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Aperol Spritz</div><div class="item-desc">Aperol, prosecco, appelsinskive</div></div><div class="item-price">119 kr</div></div>
+      <div class="menu-item"><div><div class="item-name">Alkoholfri cocktail</div><div class="item-desc">Spør betjeningen om dagens valg</div></div><div class="item-price">89 kr</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OM OSS -->
+<section id="om" style="background: #faf8f5;">
+  <div class="container">
+    <div class="section-tag">Vår historie</div>
+    <div class="section-title">Om Svingen</div>
+    <div class="om-grid">
+      <div>
+        <p>Svingen – på Sletta er mer enn en kafé. Vi er nabolagets møteplass ved Ekeberg, et sted der hverdagen smaker litt bedre.</p>
+        <p>Her finner du hjemmelaget mat, nybryggd kaffe og en varm atmosfære – enten du kommer for en rask lunsj, en pizza på kvelden eller noe godt i glasset.</p>
+        <p>Vi tar imot både henting og levering, og har plass til private selskaper og firmamiddager.</p>
+      </div>
+      <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80" alt="Interiør" />
+    </div>
+  </div>
+</section>
+
+<!-- ANMELDELSER -->
+<section>
+  <div class="container">
+    <div class="section-tag">Hva gjestene sier</div>
+    <div class="section-title">Anmeldelser</div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Fantastisk kafé, restaurant og bar på Sletta! Vi har hatt stor glede av dette stedet siden vi flyttet til nabolaget."</div>
+        <div class="review-author">Nikos T. · Google</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Beste lunsjen i Oslo øst. Surdeigsbrødet er nydelig og kaffen er alltid perfekt. Kommer hit hver fredag!"</div>
+        <div class="review-author">Marianne L. · Google</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Utrolig hyggelig stemning og deilig mat. Pizzaen er blant de beste jeg har spist i Oslo. Varmt anbefalt!"</div>
+        <div class="review-author">Thomas B. · Google</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BORDBESTILLING -->
+<div class="booking-section" id="bord">
+  <div class="container">
+    <div class="section-tag">Reserver plass</div>
+    <div class="section-title">Bestill bord</div>
+    <p style="color: var(--lys); font-size: 14px; margin-bottom: 1.5rem;">For inntil 7 personer. Større grupper? Se gruppebestilling nedenfor.</p>
+    <form name="bordbestilling" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="bordForm" onsubmit="handleBord(event)">
+      <input type="hidden" name="form-name" value="bordbestilling" />
+      <p style="display:none;"><input name="bot-field" /></p>
+      <div class="booking-form">
+        <input type="text" name="navn" placeholder="Ditt navn" required />
+        <input type="date" name="dato" required />
+        <select name="tidspunkt">
+          <option>18:00</option><option>18:30</option><option>19:00</option>
+          <option>19:30</option><option>20:00</option><option>20:30</option>
+        </select>
+        <select name="antall">
+          <option>2 personer</option><option>3 personer</option><option>4 personer</option>
+          <option>5 personer</option><option>6 personer</option><option>7 personer</option>
+        </select>
+        <input type="tel" name="telefon" placeholder="Ditt telefonnummer" required style="min-width:150px;" />
+        <button type="submit" class="btn-gold">Bekreft reservasjon</button>
+      </div>
+    </form>
+    <div id="bordSuksess" style="display:none; background:#e8f5e9; border:1px solid #4caf50; border-radius:12px; padding:1.5rem; margin-top:1rem; text-align:center;">
+      <p style="color:#2e7d32; font-size:16px; font-weight:bold;">Takk! Vi bekrefter reservasjonen på telefon. 🎉</p>
+    </div>
+  </div>
+</div>
+
+<!-- GRUPPEBESTILLING -->
+<section class="gruppe-section" id="gruppe">
+  <div class="container">
+    <div class="section-tag">Selskaper & arrangementer</div>
+    <div class="section-title">Gruppebestilling</div>
+    <p style="color: #666; margin-bottom: 2rem; font-size: 15px;">For grupper på 8 personer eller mer. Vi hjelper deg med å planlegge et minneverdig arrangement.</p>
+    <form name="gruppebestilling" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="gruppeForm" onsubmit="handleGruppe(event)">
+      <input type="hidden" name="form-name" value="gruppebestilling" />
+      <p style="display:none;"><input name="bot-field" /></p>
+      <div class="form-grid">
+        <div class="form-group"><label>Navn</label><input type="text" name="navn" placeholder="Ditt fulle navn" required /></div>
+        <div class="form-group"><label>Telefon</label><input type="tel" name="telefon" placeholder="40 55 57 77" required /></div>
+        <div class="form-group full"><label>E-post</label><input type="email" name="epost" placeholder="din@epost.no" required /></div>
+        <div class="form-group"><label>Dato</label><input type="date" name="dato" required /></div>
+        <div class="form-group"><label>Tidspunkt</label><input type="time" name="tidspunkt" /></div>
+        <div class="form-group"><label>Antall personer</label>
+          <select name="antall">
+            <option value="">Velg antall</option>
+            <option>8–15 personer</option><option>16–25 personer</option>
+            <option>26–40 personer</option><option>40+ personer</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Type arrangement</label>
+          <select name="type">
+            <option value="">Velg type</option>
+            <option>Bursdag</option><option>Firmamiddag</option>
+            <option>Konfirmasjon</option><option>Jubileum</option><option>Annet</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Ønsker og tilvalg</label>
+          <div class="checkbox-group" style="background:#fff; padding:1rem; border-radius:8px; border:1px solid #ddd;">
+            <label class="checkbox-row"><input type="checkbox" name="tilvalg" value="Eget rom"> Eget rom / avdelt seksjon</label>
+            <label class="checkbox-row"><input type="checkbox" name="tilvalg" value="Satt meny"> Satt meny (3-retters)</label>
+            <label class="checkbox-row"><input type="checkbox" name="tilvalg" value="Drikkepakke"> Drikkepakke / bar</label>
+            <label class="checkbox-row"><input type="checkbox" name="tilvalg" value="Kake"> Kake / dessertbord</label>
+            <label class="checkbox-row"><input type="checkbox" name="tilvalg" value="Allergi"> Allergimat / vegetar</label>
+          </div>
+        </div>
+        <div class="form-group full"><label>Kommentar</label><textarea name="kommentar" placeholder="Spesielle ønsker, spørsmål eller annet vi bør vite..."></textarea></div>
+      </div>
+      <button type="submit" class="submit-btn">Send forespørsel →</button>
+    </form>
+    <div class="success-msg" id="successMsg">
+      <h3>Takk for din forespørsel!</h3>
+      <p>Vi tar kontakt innen 24 timer for å bekrefte og planlegge arrangementet.<br><br>Spørsmål? Ring oss på <strong>40 55 57 77</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="container">
+    <div class="section-tag">Finn oss</div>
+    <div class="section-title">Kontakt & adresse</div>
+    <div class="kontakt-grid">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <div class="kontakt-card">
+          <div class="lbl">Åpningstider</div>
+          <div class="val">Mandag – Fredag: 08:00 – 22:00<br>Lørdag – Søndag: 09:00 – 23:00</div>
+        </div>
+        <div class="kontakt-card">
+          <div class="lbl">Kontakt oss</div>
+          <div class="val">📞 40 55 57 77<br>✉ post@pa-svingen.no</div>
+        </div>
+        <div class="kontakt-card">
+          <div class="lbl">Vi tilbyr</div>
+          <div class="val">Servering · Henting · Levering<br>Gruppebestilling · Firmamiddag</div>
+        </div>
+      </div>
+      <div class="map-card">
+        <div>
+          <div class="lbl">Adresse</div>
+          <div class="val">Ballplassveien 2<br>1181 Oslo<br><br>Like ved Ekeberg og Sletta.<br>God parkering rett utenfor.</div>
+        </div>
+        <a class="map-btn" href="https://maps.google.com/?q=Ballplassveien+2+Oslo" target="_blank">Åpne i Google Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Svingen – på Sletta</div>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="#gruppe">Gruppebestilling</a>
+    </div>
+    <div class="footer-copy">© 2026 Svingen på Sletta · Ballplassveien 2, 1181 Oslo · 40 55 57 77</div>
+  </div>
+</footer>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.menu-list').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+function handleBord(e) {
+  e.preventDefault();
+  var form = document.getElementById('bordForm');
+  fetch('/', { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: new URLSearchParams(new FormData(form)).toString() })
+    .then(function() { form.style.display = 'none'; document.getElementById('bordSuksess').style.display = 'block'; })
+    .catch(function() { form.style.display = 'none'; document.getElementById('bordSuksess').style.display = 'block'; });
+}
+function handleGruppe(e) {
+  e.preventDefault();
+  var form = document.getElementById('gruppeForm');
+  fetch('/', { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: new URLSearchParams(new FormData(form)).toString() })
+    .then(function() { form.style.display = 'none'; document.getElementById('successMsg').style.display = 'block'; })
+    .catch(function() { form.style.display = 'none'; document.getElementById('successMsg').style.display = 'block'; });
+}
+</script>
+</body>
+</html>
